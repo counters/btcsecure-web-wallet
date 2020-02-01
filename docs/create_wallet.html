@@ -1,0 +1,271 @@
+<!doctype html>
+<!-- header start -->
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v3.8.6">
+    <title>BTC.Secure wallet</title>
+    <link href="/css/style.css" rel="stylesheet">
+    <script src="/js/index.bundle.js"></script>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest.json">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+</head>
+<body class="text-center">
+<div class="container d-flex w-100 h-100 mx-auto flex-column">
+    <header class="_masthead mb-auto">
+        <!--<div class="inner">-->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="/home.html">
+                <img src="img/btcsecure-logo-square-crop.svg" width="36" height="44" alt="Wallet" class="mr-3"> 
+                <span class="_trans" data-trans="brand_wallet">Wallet</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <ul class="navbar-nav _mr-auto mt-2 mt-lg-0">
+                            <li class="nav-item">
+                                <a id="button-logout" class="btn btn btn-outline-dark _nav-link _trans" href="logout.html" data-trans="Logout" tabindex="-1" aria-disabled="true"> Logout</a>
+                            </li>
+                            <!--    <div class="dropdown text-right">
+                                    <a class="btn btn-light dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Menu
+                                    </a>
+
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                        <a id="button-logout" class="dropdown-item trans" href="logout.html" data-trans="Logout">Logout</a>
+                                    </div>
+                                </div>-->
+                            <!--<i class="fas fa-sign-out"></i>-->
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <!--</div>-->
+    </header>
+<!-- header end --> 
+    <main role="main" class="inner cover">
+        <form action="#" method="post">
+
+            <div class="form-group">
+                <label for="password" class="trans" data-trans="Password">Password</label>
+                <input type="password" class="form-control form-control-lg " id="password" autocomplete="off">
+                <div class="valid-password valid-feedback"></div>
+            </div>
+            <div class="form-group">
+                <label for="reenterpassword" class="trans" data-trans="PasswordConfirmation">Confirm Password</label>
+                <input type="password" class="form-control form-control-lg" id="reenterpassword" autocomplete="off">
+            </div>
+        </form>
+        <!-- Modal -->
+        <div class="modal fade _modal-lg" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title trans" data-trans="CreateWallet" id="exampleModalCenterTitle"></h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <div id="qrcode" class="mx-auto" style="width: 256px; height: 256px"></div>
+                        </div>
+                        <form>
+                            <div class="form-group row">
+                                <label for="url-for-wallet" class="col-sm-2 col-form-label col-form-label-sm trans" data-trans="SaveWalletLink"></label>
+                                <div class="col-sm-10">
+                                    <div class="input-group" >
+
+                                        <textarea class="form-control" id="url-for-wallet" readonly rows="8"></textarea>
+                                        <div id="url-for-wallet-copy" class="input-group-append copy-string" data-value="">
+                                            <span class="input-group-text"><i class="fas fa-copy"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row no-gutters">
+                                <label for="password-for-wallet" class="col-sm-2 col-form-label trans" data-trans="SaveWalletPassword"></label>
+                                    <div class="col-sm-10 input-group mb-3">
+                                        <input type="password" class="form-control" id="password-for-wallet" readonly>
+                                        <div class="input-group-append">
+                                            <button id="button-show-password" type="button" class="btn btn-light _btn-outline-secondary"><i class="fas fa-eye-slash"></i></button>
+                                        </div>
+                                    </div>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="confirmChecked">
+                                <label class="custom-control-label trans" for="confirmChecked" data-trans="SaveWalletConfirmation"></label>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="button-open-wallet" type="button" class="btn btn-primary mx-auto disabled">Open wallet</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        function _generateWallet(password, callback) {
+            jQuery.getScript("https://unpkg.com/minterjs-wallet", function () {// /js/minterjs_wallet.bundle.js
+                console.log("minterjs_wallet");
+                const wallet = minterWallet.generateWallet();
+                const walletMx = wallet.getAddressString();
+                // console.log(wallet.getMnemonic());
+
+                console.log(walletMx);
+                // const mnemonic = decodeURL(base64urlData, password);
+                // console.log(getWallet(mnemonic));
+                // var decrypted = bf.decrypt(encrypted);
+                // decrypted = bf.trimZeros(decrypted); // for string/text information
+                // console.log(decrypted);
+                // const wallet2 = minterWallet.walletFromMnemonic(wallet.getMnemonic());
+                callback(wallet);
+                return wallet;
+            });
+
+
+            jQuery("#button-show-password").on('click', function() {
+                console.log('show');
+                jQuery(this).children('i').toggleClass("fa-eye fa-eye-slash");
+
+                var input = jQuery("#password-for-wallet");
+                if (input.attr("type") === "password") {
+                    input.attr("type", "text");
+                } else {
+                    input.attr("type", "password");
+                }
+
+            });
+
+        }
+        function openViewWallet(password){
+            const wallet = _generateWallet(password, function (wallet) {
+                // console.log("generateWallet callback()");
+                // console.log(wallet.getMnemonic());
+                const urlWallet = getUrl(wallet.getMnemonic(), password);
+                const fullUrl = params.HttpsUrl + '/?' + urlWallet;
+                jQuery.getScript("/js/qrcode.min.js", function () {
+                    let qrcode = new QRCode(document.getElementById("qrcode"), {
+                        text: fullUrl,
+                        width: 256,
+                        height: 256,
+                        colorDark: "#000000",
+                        colorLight: "#ffffff",
+                        correctLevel: 2
+                    });
+                });
+
+                jQuery('#url-for-wallet').val(fullUrl);
+                jQuery('#url-for-wallet-copy').data('value',fullUrl);
+
+                setTimeout(function(){
+                    copyString.update();
+                }, 200);
+                jQuery('#password-for-wallet').val(password);
+
+                jQuery('#exampleModalCenter').modal({
+                    keyboard: false,
+                    backdrop: 'static'
+                });
+            });
+        }
+        jQuery(document).ready(function () {
+            // setDisplay(jQuery('.valid-password'), true);
+            // const password = 'asdf123';
+            // openViewWallet(password);
+            jQuery('#password').bind('input', function () {
+                let password = jQuery('#password');
+                let pass1 = password.val();
+                let validHelp = jQuery('.valid-password');
+                if (pass1.length > 5) {
+
+                    validHelp.text(trans.nalidePassword);
+                    password.removeClass('is-invalid');
+                    setClass(password, 'is-valid');
+
+                    validHelp.removeClass('invalid-feedback');
+                    setClass(validHelp, 'valid-feedback');
+                } else {
+                    validHelp.text(trans.NotValidePassword);
+                    console.log(trans.NotValidePassword);
+                    password.removeClass('is-valid');
+                    setClass(password, 'is-invalid');
+                    setClass(validHelp, 'd-block');
+
+                    validHelp.removeClass('is-invalid');
+                    setClass(validHelp, 'invalid-feedback');
+                }
+                confirm();
+            });
+            jQuery('#reenterpassword').bind('input', function () {
+                confirm();
+            });
+            jQuery('#confirmChecked').change(function () {
+                console.log("confirmChecked");
+                let open_wallet = jQuery('#button-open-wallet');
+                if (this.checked) {
+                    console.log("confirmChecked ok");
+
+                    open_wallet.removeClass('disabled');
+
+                } else {
+                    setClass(open_wallet, 'disabled');
+                }
+                // $('#textbox1').val(this.checked);
+            });
+            jQuery('#button-open-wallet').click(function () {
+                if (jQuery('#confirmChecked').is(':checked')) {
+                    // console.log("redirect" + jQuery('#url-for-wallet').val());
+                    window.location.href = jQuery('#url-for-wallet').val();
+                } else {
+                    console.log("not checked");
+                }
+            });
+
+            function confirm(/*pass1, pass2=null*/) {
+                let pass1 = jQuery('#password').val();
+                let pass2 = jQuery('#reenterpassword').val();
+                if (pass1 === pass2 && pass2.length> 2 ) {
+                    console.log("password ok");
+                    openViewWallet(pass1);
+                } else {
+                    console.log("password not ok");
+                }
+            }
+
+
+
+            /*     jQuery( "#password" ).change(function() {
+                     alert( "Handler for .change() called." );
+                 });*/
+            // const wallet = generateWallet();
+
+        });
+    </script>
+    <!-- footer start -->
+<footer class="_mastfoot mt-auto">
+    <div class="inner">
+        <p>Powered by <a href="#"><img src="img/minter-logo.svg" class="mb-3" height="29" alt="Minter"></a></p>
+    </div>
+</footer>
+</div>
+<script>
+    // jQuery( document ).ready(function() {
+
+    // });
+</script>
+</body>
+</html>
+
+<!-- footer end -->

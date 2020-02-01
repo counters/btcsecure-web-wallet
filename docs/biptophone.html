@@ -1,0 +1,292 @@
+<!doctype html>
+<!-- header start -->
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v3.8.6">
+    <title>BTC.Secure wallet</title>
+    <link href="/css/style.css" rel="stylesheet">
+    <script src="/js/index.bundle.js"></script>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest.json">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+</head>
+<body class="text-center">
+<div class="container d-flex w-100 h-100 mx-auto flex-column">
+    <header class="_masthead mb-auto">
+        <!--<div class="inner">-->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="/home.html">
+                <img src="img/btcsecure-logo-square-crop.svg" width="36" height="44" alt="Wallet" class="mr-3"> 
+                <span class="_trans" data-trans="brand_wallet">Wallet</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <ul class="navbar-nav _mr-auto mt-2 mt-lg-0">
+                            <li class="nav-item">
+                                <a id="button-logout" class="btn btn btn-outline-dark _nav-link _trans" href="logout.html" data-trans="Logout" tabindex="-1" aria-disabled="true"> Logout</a>
+                            </li>
+                            <!--    <div class="dropdown text-right">
+                                    <a class="btn btn-light dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Menu
+                                    </a>
+
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                        <a id="button-logout" class="dropdown-item trans" href="logout.html" data-trans="Logout">Logout</a>
+                                    </div>
+                                </div>-->
+                            <!--<i class="fas fa-sign-out"></i>-->
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <!--</div>-->
+    </header>
+<!-- header end -->
+    <main role="main" class="inner cover">
+        <div class="row">
+            <div class="col-md-8 offset-md-2 col-lg-6 offset-lg-3">
+
+                <div class="form-group">
+                    <img src="https://pay.btcsecure.io/logo/providers/biptophone.png" class="img-fluid w-50 bg-primary" alt="">
+                </div>
+                <div class="form-group">
+                    <select id="select-coin" class="form-control form-control-lg" disabled></select>
+                    <small id="emailHelp" class="form-text text-muted trans" data-trans="SendCoin"></small>
+                </div>
+                <div class="form-group">
+                    <input class="form-control" id="phone-number" type="text" placeholder="+79151234567">
+                    <small class="form-text text-muted trans" data-trans="PayPhone"></small>
+                </div>
+                <div class="form-group">
+                    <div class="input-group mb-3">
+                        <div class="input-group mb-3">
+                            <input id="amount" type="number" class="form-control" placeholder="100">
+                            <div class="input-group-append">
+                                <span class="input-group-text" id="basic-addon2">Рубли</span>
+                            </div>
+                        </div>
+                        <!--<small class="form-text text-muted trans mt-0" data-trans="SendAmount"></small>-->
+                    </div>
+
+                </div>
+                <div class="form-group">
+                   <p>Курс BipToPhone: 1 BIP = <span id="cource_BIP_RUR"></span> руб.</p>
+                </div>
+                <p class="float-left text-right">Вы заплатите <span id="sum-amount"></span> BIP</p>
+                <button id="button-pay" type="submit" class="btn btn-primary float-right px-5 trans" data-trans="PayPay">Pay</button>
+            </div>
+        </div>
+
+
+
+    </main>
+
+
+    <script>
+
+        let minter=null;
+        function getSignedTx ( WalletAddress, sendToMx, amount, coin, gasCoin, message, privateKey=null, callback){
+            if (privateKey==null) privateKey='5fa3a8b186f6cc2d748ee2d8c0eb7a905a7b73de0f2c34c5e7857c3b46f187da';
+            minter.getNonce(WalletAddress)
+                .then((nonce) => {
+                    const txParams = {
+                        privateKey: privateKey,
+                        // privateKey: ,
+                        nonce: nonce,
+                        chainId: 1,
+                        type: minterSDK.TX_TYPE.SEND,
+                        data: {
+                            // to: 'Mx01234554a929c70b353a7f6bf0478edc3143cc35',
+                            to: sendToMx,
+                            value: amount,
+                            coin: coin,
+                        },
+                        gasCoin:coin,
+                        gasPrice: 1,
+                        message: message,
+                    };
+                    const tx = minterSDK.prepareSignedTx(txParams);
+                    callback(tx, txParams);
+
+                })
+                .catch((error) => {
+                });
+        }
+
+
+        jQuery(document).ready(function () {
+
+            jQuery.getScript("https://unpkg.com/minter-js-sdk", function () {
+                minter = new minterSDK.Minter({apiType: 'node', baseURL: params.HttpsApi+'/'});
+
+            });
+
+            let WalletAddress = localStorage.getItem('mx');
+            let WalletSecretKey = localStorage.getItem('key');
+
+            let minterApi = MinterApi(params.HttpsApi);
+            MinterBalance.api = minterApi;
+            minterApi(minterApi.Address, WalletAddress, null, function (result) {//Mxb21ea18732fd6de357c63477f85abc6b198ee3d6
+                //Mx0903ab168597a7c86ad0d4b72424b3632be0af1b
+                let array = result.result.balance;
+                // console.log('MinterApi Callback', array);
+
+                jQuery.each(array, function (key, value) {
+                    let Amount=minterUtil.convertFromPip(value);
+                    // console.log(key+' '+Amount);
+
+                    let selected= false;
+                    if (key=='BIP') selected= true;
+                    jQuery("#select-coin").append(new Option(numeral(Amount).format()+' '+key, key,selected,selected) );
+                });
+                // coin_select(jQuery( "#select-coin" ).val());
+            }, 0);
+
+            let cource_BIP_RUR=null;
+
+            jQuery.ajax({
+                // type: "POST",
+                dataType: "json",
+                url: 'https://pay.btcsecure.io/api/provider/biptophone',
+                // data: data,
+                success: function(data){
+                    // console.log('https://pay.btcsecure.io/api/provider/biptophone', data);
+
+                    cource_BIP_RUR=parseFloat(data['result']['course']);
+                    let maxbip=parseFloat(data['result']['maxbip']);
+                    jQuery("#cource_BIP_RUR").text(cource_BIP_RUR);
+
+
+                    jQuery('#amount').bind('input', function () {
+                        // console.log('wallet bind');
+                        let amountObj = jQuery('#amount');
+                        let amount = amountObj.val();
+
+                        jQuery("#sum-amount").text(  parseFloat((amount/cource_BIP_RUR)+0.03) );
+
+                        if (amount>(1*cource_BIP_RUR) && (amount*cource_BIP_RUR) < maxbip ) {
+                            amountObj.removeClass('is-invalid');
+                            setClass(amountObj, 'is-valid');
+                        } else {
+                            amountObj.removeClass('is-valid');
+                            setClass(amountObj, 'is-invalid');
+                        }
+                    });
+                }
+            });
+
+            jQuery('#phone-number').bind('input', function () {
+                // console.log('wallet bind');
+                let walletObj = jQuery('#phone-number');
+                let wallet = walletObj.val();
+
+                const phoneNumber = parsePhoneNumberFromString(wallet);
+                // console.log(phoneNumber.number, phoneNumber.isValid());
+
+                if (phoneNumber.isValid()) {
+                    walletObj.removeClass('is-invalid');
+                    setClass(walletObj, 'is-valid');
+                    walletObj.val(phoneNumber.number);
+                } else {
+                    walletObj.removeClass('is-valid');
+                    setClass(walletObj, 'is-invalid');
+                }
+            });
+
+
+ 
+            jQuery('#button-pay').click(function () {
+
+                let phone_number  = jQuery( "#phone-number" ).val();
+                let amountObj = jQuery('#amount');
+                let amount = amountObj.val();
+
+                const phoneNumber = parsePhoneNumberFromString(phone_number);
+
+
+                // console.log("#button-pay').click");
+
+                if (phoneNumber.isValid() && amount>(1*cource_BIP_RUR) ){
+
+                    const phoneValidNumber = phoneNumber.number.slice(1);
+
+                    jQuery.ajax({
+                        type: "POST",
+                        dataType: "json",
+                        url: 'https://pay.btcsecure.io/api/pay/biptophone',
+                        data: { phone: phoneValidNumber },
+                        success: function(data){
+
+                            if ( data['error']==1)  InteractiveToast('Error');
+
+                            const dataPhone = data['phone'];
+                            const pay_coin = data['pay_coin'];
+                            const pay_to_mx = data['pay_to_mx'];
+                            const payload = data['payload'];
+                            if (dataPhone == phoneValidNumber) {
+                                getSignedTx(WalletAddress, 'Mx403b763ab039134459448ca7875c548cd5e80f77', parseFloat(amount/cource_BIP_RUR), pay_coin, pay_coin, payload, WalletSecretKey, function (tx, txParams) {
+                                    // console.log('signed tx', tx.serialize().toString('hex'));
+                                    // console.log(txParams);
+                                 /*   minter.estimateTxCommission({
+                                        transaction: tx.serialize().toString('hex')
+                                    }).then((commission) => {
+
+                                        let commissionAmount = minterUtil.convertFromPip(commission);
+                                        console.log(commissionAmount);
+                                        // 0.1
+                                    }).catch((error) => {
+                                        console.log(error);
+                                    });*/
+                                     minter.postTx(txParams, {gasRetryLimit: 2})
+                                         .then((txHash) => {
+                                             // console.log(txHash);
+                                             InteractiveToast(trans.SendResultTotal);
+                                         })
+                                         .catch((error) => {
+                                             // console.log('error');
+                                             // console.log(error);
+                                         });
+                                });
+                            }
+                        }
+                    });
+
+
+                } else {
+                    InteractiveToast('Error');
+                }
+
+
+            });
+
+        });
+    </script>
+    <!-- footer start -->
+<footer class="_mastfoot mt-auto">
+    <div class="inner">
+        <p>Powered by <a href="#"><img src="img/minter-logo.svg" class="mb-3" height="29" alt="Minter"></a></p>
+    </div>
+</footer>
+</div>
+<script>
+    // jQuery( document ).ready(function() {
+
+    // });
+</script>
+</body>
+</html>
+
+<!-- footer end -->

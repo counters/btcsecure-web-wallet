@@ -1,0 +1,217 @@
+<!doctype html>
+<!-- header start -->
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v3.8.6">
+    <title>BTC.Secure wallet</title>
+    <link href="/css/style.css" rel="stylesheet">
+    <script src="/js/index.bundle.js"></script>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest.json">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+</head>
+<body class="text-center">
+<div class="container d-flex w-100 h-100 mx-auto flex-column">
+    <header class="_masthead mb-auto">
+        <!--<div class="inner">-->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="/home.html">
+                <img src="img/btcsecure-logo-square-crop.svg" width="36" height="44" alt="Wallet" class="mr-3"> 
+                <span class="_trans" data-trans="brand_wallet">Wallet</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <ul class="navbar-nav _mr-auto mt-2 mt-lg-0">
+                            <li class="nav-item">
+                                <a id="button-logout" class="btn btn btn-outline-dark _nav-link _trans" href="logout.html" data-trans="Logout" tabindex="-1" aria-disabled="true"> Logout</a>
+                            </li>
+                            <!--    <div class="dropdown text-right">
+                                    <a class="btn btn-light dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Menu
+                                    </a>
+
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                        <a id="button-logout" class="dropdown-item trans" href="logout.html" data-trans="Logout">Logout</a>
+                                    </div>
+                                </div>-->
+                            <!--<i class="fas fa-sign-out"></i>-->
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <!--</div>-->
+    </header>
+<!-- header end -->
+    <main role="main" class="inner cover">
+        <div class="row">
+            <div class="col-lg-6 mt-3">
+                <div class="card" id="balance">
+                    <div class="card-header trans" data-trans="HomeBalance"></div>
+                    <div class="card-body">
+                        <!--<h5 class="card-title trans" data-trans="HomeBalance"></h5>-->
+                        <div>
+                            <table class="table table-borderless">
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                            <div class="bips lead"></div>
+                            <!--<div class="dollars lead"></div>-->
+                        </div>
+                        <!--<h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>-->
+                    </div>
+                    <div class="card-footer">
+                        <span class="_text-muted dollars lead"></span>
+                    </div>
+                </div>
+            </div>
+        <!--</div>-->
+
+        <!--<div class="row mt-2">-->
+          <!--  <div class="col-12">
+                <span class="trans" data-trans="HomeTransferring"></span>
+            </div>-->
+            <div class="col-lg-6 mt-3">
+
+                <div class="card">
+                    <div class="card-header trans" data-trans="HomeTransferring"></div>
+                    <div class="card-body">
+                        <a class="btn _btn-lg btn-outline-secondary m-1" href="receive.html" role="button">
+                            <i class="fa fa-hand-holding-usd fa-3x"></i>
+                            <br><small class="trans" data-trans="HomeReceive"></small>
+                        </a>
+                        <button class="btn _btn-lg btn-outline-secondary m-1" data-toggle="tooltip" title="Temporarily unavailable">
+                            <i class="fa fa-exchange-alt fa-3x"></i>
+                            <br><small class="trans" data-trans="HomeExchange"></small>
+                        </button>
+                        <a href="send.html" role="button" class="btn _btn-lg btn-outline-secondary m-1" data-toggle="tooltip" title="Send">
+                            <i class="fa fa-user fa-3x"></i>
+                            <br><small class="trans" data-trans="HomeSend"></small>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        <!--</div>-->
+        <!--<div class="row mt-2">-->
+      <!--      <div class="col-12">
+                <span class="trans" data-trans="HomeSpending"></span>
+            </div>-->
+            <div class="col-lg-6 mt-3">
+                <div class="card">
+                    <div class="card-header trans" data-trans="HomeSpending"></div>
+                    <div class="card-body">
+                        <a href="mobile-services.html" role="button" class="btn _btn-lg btn-outline-secondary m-1">
+                            <i class="fa fa-mobile-alt fa-3x"></i>
+                            <br><small class="trans" data-trans="HomeCategoryMobile"></small>
+                        </a>
+                        <button class="btn _btn-lg btn-outline-secondary m-1" data-toggle="tooltip" title="Temporarily unavailable">
+                            <i class="fa fa-gamepad fa-3x"></i>
+                            <br><small class="trans" data-trans="HomeCategoryGames"></small>
+                        </button>
+                        <button class="btn _btn-lg btn-outline-secondary m-1" data-toggle="tooltip" title="Temporarily unavailable">
+                            <i class="fa fa-users fa-3x"></i>
+                            <br><small class="trans" data-trans="HomeCategorySocial"></small>
+                        </button>
+                        <button class="btn _btn-lg btn-outline-secondary m-1" data-toggle="tooltip" title="Temporarily unavailable">
+                            <i class="fa fa-book-open fa-3x"></i>
+                            <br><small class="trans" data-trans="HomeCategoryEducation"></small>
+                        </button>
+                        <button class="btn _btn-lg btn-outline-secondary m-1" data-toggle="tooltip" title="Temporarily unavailable">
+                            <i class="fa fa-store-alt fa-3x"></i>
+                            <br><small class="trans" data-trans="HomeCategoryStores"></small>
+                        </button>
+                        <button class="btn _btn-lg btn-outline-secondary m-1" data-toggle="tooltip" title="Temporarily unavailable">
+                            <i class="fa fa-hand-holding-heart fa-3x"></i>
+                            <br><small class="trans" data-trans="HomeCategoryCharity"></small>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+
+    <script>
+        jQuery(document).ready(function () {
+
+            issetMx();
+            let WalletAddress = localStorage.getItem('mx');
+            jQuery('[data-toggle="tooltip"]').tooltip()
+            let minterApi = MinterApi(params.HttpsApi);
+            MinterBalance.api = minterApi;
+            minterApi(minterApi.Address, WalletAddress, null, function (result) {//Mxb21ea18732fd6de357c63477f85abc6b198ee3d6
+                //Mx0903ab168597a7c86ad0d4b72424b3632be0af1b
+                let array = result.result.balance;
+                // console.log('MinterApi Callback', /*result,*/ array);
+
+                let tbody = '';
+                let table_tbody = jQuery('#balance table > tbody');
+
+                MinterBalance(array, null, function (value) {
+                    // console.log("End all balance", value);
+
+                    if (value==0) tbody = '';
+                    table_tbody.html(tbody);
+                    let bipDevAPI = BipDevAPI();
+                    jQuery('#balance .bips').text(numeral(value).format()+' '+params.MinterDefaultCoin);
+                    bipDevAPI(bipDevAPI.Price, null, null, function (cource) {
+                        console.log("End", cource);
+                        jQuery('#balance .dollars').text(numeral(value*cource).format('$0,0.00'));
+                    });
+
+                }, function (amound,coin,price) {
+                    console.log(amound+' '+coin+' '+price);
+
+                     tbody += '<tr><td class="text-right">'+numeral(amound).format()+'</td><td class="text-left">'+coin+'</td></tr>';
+
+
+                });
+
+            }, 0);
+            // renderCall(amound,coin,price)
+
+            const pips = minterUtil.convertFromPip('30272608501212841629412');
+            console.log(pips);
+
+            let key = localStorage.getItem('key');
+            let mx = localStorage.getItem('mx');
+            if (key && mx) {
+                console.log(mx, key);
+            } else {
+
+            }
+            // let minterApi = MinterApi(params.HttpsApi);
+            // const minter = new Minter({apiType: 'node', baseURL: ''});
+        });
+    </script>
+    <!-- footer start -->
+<footer class="_mastfoot mt-auto">
+    <div class="inner">
+        <p>Powered by <a href="#"><img src="img/minter-logo.svg" class="mb-3" height="29" alt="Minter"></a></p>
+    </div>
+</footer>
+</div>
+<script>
+    // jQuery( document ).ready(function() {
+
+    // });
+</script>
+</body>
+</html>
+
+<!-- footer end -->

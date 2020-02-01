@@ -1,0 +1,339 @@
+<!doctype html>
+<!-- header start -->
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v3.8.6">
+    <title>BTC.Secure wallet</title>
+    <link href="/css/style.css" rel="stylesheet">
+    <script src="/js/index.bundle.js"></script>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest.json">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+</head>
+<body class="text-center">
+<div class="container d-flex w-100 h-100 mx-auto flex-column">
+    <header class="_masthead mb-auto">
+        <!--<div class="inner">-->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="/home.html">
+                <img src="img/btcsecure-logo-square-crop.svg" width="36" height="44" alt="Wallet" class="mr-3"> 
+                <span class="_trans" data-trans="brand_wallet">Wallet</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <ul class="navbar-nav _mr-auto mt-2 mt-lg-0">
+                            <li class="nav-item">
+                                <a id="button-logout" class="btn btn btn-outline-dark _nav-link _trans" href="logout.html" data-trans="Logout" tabindex="-1" aria-disabled="true"> Logout</a>
+                            </li>
+                            <!--    <div class="dropdown text-right">
+                                    <a class="btn btn-light dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Menu
+                                    </a>
+
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                        <a id="button-logout" class="dropdown-item trans" href="logout.html" data-trans="Logout">Logout</a>
+                                    </div>
+                                </div>-->
+                            <!--<i class="fas fa-sign-out"></i>-->
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <!--</div>-->
+    </header>
+<!-- header end -->
+    <main role="main" class="inner cover">
+        <div class="row">
+            <div class="col-md-8 offset-md-2 col-lg-6 offset-lg-3" id="multi-selector">
+                <div class="form-group">
+                    <select id="select-coin" class="form-control form-control-lg"></select>
+                    <small id="emailHelp" class="form-text text-muted trans" data-trans="SendCoin"></small>
+                </div>
+                <div class="form-group">
+                    <select id="select-type" class="form-control form-control-lg" name="send_type">
+                        <option value="wallet" class="trans" data-trans="SendToWallet"></option>
+                        <option value="one" class="trans" data-trans="SendToSingle"></option>
+                        <option value="many" class="trans" data-trans="SendToMany"></option>
+                    </select>
+                    <small class="form-text text-muted _trans" data-trans="SendCoin">Select</small>
+                </div>
+                <div class="form-group for-wallet">
+                    <input class="form-control" id="wallet" type="text" placeholder="Mx***">
+                    <small class="form-text text-muted trans" data-trans="SendToWallet"></small>
+                </div>
+                <div class="form-group for-many">
+                    <input class="form-control" type="number" placeholder="10">
+                    <small class="form-text text-muted trans" data-trans="SendNumberRecipients"></small>
+                </div>
+                <div class="form-group for-one">
+                    <input class="form-control" id="password" type="password" placeholder="password">
+                    <small class="form-text text-muted _trans" data-trans="">password for wallet</small>
+                </div>
+                <div class="form-group for-one">
+                    <input class="form-control" id="confirm-password" type="password" placeholder="">
+                    <small class="form-text text-muted _trans" data-trans="">confirm password</small>
+                </div>
+                <div class="form-group">
+                    <div class="input-group mb-3">
+                        <input id="amount" type="number" step="any" class="form-control" placeholder="0.0000">
+                        <div class="input-group-append">
+                            <span class="input-group-text" id="coin-simbol"></span>
+                        </div>
+                    </div>
+                    <small class="form-text text-muted trans mt-0" data-trans="SendAmount"></small>
+
+                </div>
+                <button id="button-next" type="submit" class="btn btn-primary float-right px-5 trans" data-trans="SendNext">Next</button>
+            </div>
+        </div>
+
+    </main>
+
+
+    <script>
+
+
+        let minter=null;
+        function validateMx(mx){
+            let result = mx.match(/^Mx[a-fA-F0-9]{40}$/);
+            return isset(result);
+        }
+
+        function getSignedTx ( WalletAddress, sendToMx, amount, coin, gasCoin, privateKey=null, callback){
+            if (privateKey==null) privateKey='5fa3a8b186f6cc2d748ee2d8c0eb7a905a7b73de0f2c34c5e7857c3b46f187da';
+            minter.getNonce(WalletAddress)
+                .then((nonce) => {
+                    // console.log('getNonce():', nonce);
+
+                    const txParams = {
+                        privateKey: privateKey,
+                        // privateKey: ,
+                        nonce: nonce,
+                        chainId: 1,
+                        type: minterSDK.TX_TYPE.SEND,
+                        data: {
+                            // to: 'Mx01234554a929c70b353a7f6bf0478edc3143cc35',
+                            to: sendToMx,
+                            value: amount,
+                            coin: coin,
+                        },
+                        gasCoin:coin,
+                        gasPrice: 1,
+                        message: '',
+                    };
+                    // console.log(txParams);
+                    const tx = minterSDK.prepareSignedTx(txParams);
+                    // console.log('signed tx', tx.serialize().toString('hex'));
+                    callback(tx, txParams);
+
+                })
+                .catch((error) => {
+                    // ...
+                });
+        }
+        jQuery(document).ready(function () {
+
+            let WalletAddress = localStorage.getItem('mx');
+            let WalletSecretKey = localStorage.getItem('key');
+
+
+
+            jQuery.getScript("https://unpkg.com/minter-js-sdk", function () {
+                 minter = new minterSDK.Minter({apiType: 'node', baseURL: params.HttpsApi+'/'});
+
+
+
+
+            /*    getSignedTx ( WalletAddress, 'Mx01234554a929c70b353a7f6bf0478edc3143cc35', 1, 'ROBOT', 'ROBOT', null,function (tx) {
+                    minter.estimateTxCommission({
+                        transaction: tx.serialize().toString('hex')
+                    }).then((commission) => {
+
+                        let commissionAmount=minterUtil.convertFromPip(commission);
+                        console.log(commissionAmount);
+                        // 0.1
+                    }).catch((error) => {
+                        console.log(error);
+                    });
+                });*/
+
+
+
+
+
+
+   /*             minter.postTx(tx, {gasRetryLimit: 2})
+                    .then((txHash) => {
+                        console.log(txHash);
+                        // 'Mt...'
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });*/
+
+
+
+            });
+            // let WalletAddress = 'Mx12345';
+            // jQuery('#wallet').val(WalletAddress);
+            // jQuery('#wallet').text(WalletAddress);
+
+            let minterApi = MinterApi(params.HttpsApi);
+            MinterBalance.api = minterApi;
+            minterApi(minterApi.Address, WalletAddress, null, function (result) {//Mxb21ea18732fd6de357c63477f85abc6b198ee3d6
+                //Mx0903ab168597a7c86ad0d4b72424b3632be0af1b
+                let array = result.result.balance;
+                // console.log('MinterApi Callback', array);
+
+                jQuery.each(array, function (key, value) {
+                    let Amount=minterUtil.convertFromPip(value);
+                    // console.log(key+' '+Amount);
+
+                    jQuery("#select-coin").append(new Option(key+' '+numeral(Amount).format(), key));
+                });
+                coin_select(jQuery( "#select-coin" ).val());
+            }, 0);
+
+            jQuery('#wallet').bind('input', function () {
+
+                console.log('wallet bind');
+
+                let walletObj = jQuery('#wallet');
+                let wallet = walletObj.val();
+
+                if (validateMx(wallet)) {
+                    walletObj.removeClass('is-invalid');
+                    setClass(walletObj, 'is-valid');
+                } else {
+                    // validHelp.text(trans.NotValidePassword);
+                    walletObj.removeClass('is-valid');
+                    setClass(walletObj, 'is-invalid');
+                    // setClass(walletObj, 'd-block');
+                    // walletObj.removeClass('is-invalid');
+                    // setClass(walletObj, 'invalid-feedback');
+                }
+            });
+
+
+            jQuery('#button-next').click(function () {
+
+                let value  = jQuery( "#select-type" ).val();
+                // console.log(value);
+                if (value=='one') {
+
+                } else if (value=='many') {
+
+                } else if (value=='wallet') {
+
+                    let wallet= jQuery( "#wallet" ).val();
+                    let coin= jQuery( "#select-coin" ).val();
+                    let amount= parseFloat(jQuery( "#amount" ).val());
+
+                    // console.log('validateMx',validateMx(wallet),wallet, amount , coin);
+                    if (validateMx(wallet) && amount > 0 && (coin.length > 2 && coin.length < 11)) {
+                        // console.log('validateMx');
+                        getSignedTx(WalletAddress, wallet, amount, coin, coin, WalletSecretKey, function (tx, txParams) {
+                            // console.log('signed tx', tx.serialize().toString('hex'));
+                            // console.log(txParams);
+
+                            minter.postTx(txParams, {gasRetryLimit: 2})
+                                .then((txHash) => {
+                                    // console.log(txHash);
+                                    InteractiveToast(trans.SendResultTotal);
+                                    // 'Mt...'
+                                })
+                                .catch((error) => {
+                                    // console.log('error');
+                                    // console.log(error);
+                                });
+
+                        });
+                    } else {
+                        InteractiveToast('Error');
+                    }
+
+                }
+            });
+            // console.log(jQuery( "#select-type" ).val());
+            multi_select(jQuery( "#select-type" ).val());
+
+
+            jQuery('#select-coin').on('change', function (e) {
+                // const optionSelected = jQuery("option:selected", this);
+                const valueSelected = this.value;
+                // console.log(valueSelected);
+                coin_select(valueSelected);
+
+
+            });
+            jQuery('#select-type').on('change', function (e) {
+                // const optionSelected = jQuery("option:selected", this);
+                const valueSelected = this.value;
+                multi_select(valueSelected);
+
+                // console.log(valueSelected);
+
+            });
+            function coin_select(value) {
+                jQuery("#coin-simbol").text(value);
+            }
+            function multi_select(value) {
+                let multi_selector  = jQuery("#multi-selector");
+                if (value=='one') {
+                    InteractiveToast('Temporarily unavailable');
+                    multi_selector.children('.for-many').removeClass('d-block');
+                    multi_selector.children('.for-wallet').removeClass('d-block');
+                    multi_selector.children('.for-one').removeClass('d-none');
+                    setClass(multi_selector.children('.for-many'), 'd-none');
+                    setClass(multi_selector.children('.for-wallet'), 'd-none');
+                    setClass(multi_selector.children('.for-one'), 'd-block');
+                } else if (value=='many') {
+                InteractiveToast('Temporarily unavailable');
+
+                multi_selector.children('.for-many').removeClass('d-none');
+                    multi_selector.children('.for-wallet').removeClass('d-block');
+                    multi_selector.children('.for-one').removeClass('d-block');
+                    setClass(multi_selector.children('.for-many'), 'd-block');
+                    setClass(multi_selector.children('.for-wallet'), 'd-none');
+                    setClass(multi_selector.children('.for-one'), 'd-none');
+                } else if (value=='wallet') {
+                    multi_selector.children('.for-many').removeClass('d-block');
+                    multi_selector.children('.for-wallet').removeClass('d-none');
+                    multi_selector.children('.for-one').removeClass('d-block');
+                    setClass(multi_selector.children('.for-many'), 'd-none');
+                    setClass(multi_selector.children('.for-wallet'), 'd-block');
+                    setClass(multi_selector.children('.for-one'), 'd-none');
+                }
+            }
+
+        });
+    </script>
+    <!-- footer start -->
+<footer class="_mastfoot mt-auto">
+    <div class="inner">
+        <p>Powered by <a href="#"><img src="img/minter-logo.svg" class="mb-3" height="29" alt="Minter"></a></p>
+    </div>
+</footer>
+</div>
+<script>
+    // jQuery( document ).ready(function() {
+
+    // });
+</script>
+</body>
+</html>
+
+<!-- footer end -->
